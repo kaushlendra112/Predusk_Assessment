@@ -7,10 +7,11 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node -r dotenv/config --experimental-json-modules src/server.js",
+    "dev": "nodemon -r dotenv/config --experimental-json-modules src/server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "mongoose": "^8.21.0"
