@@ -7,10 +7,10 @@ import { experienceRouter } from "./route/experience.route.js";
 
 const app = express();
 
-app.use(cors({
-  origin: "https://profile.com",
-  credentials: true
-}));
+// app.use(cors({
+//   origin: "http://localhost:5173/",
+//   credentials: true
+// }));
 
 app.use(express.json({
   limit : "16kb"
@@ -31,12 +31,12 @@ app.get("/health", (req, res) => {
     });
 });
 
-app.use("/profile", profileRouter);
+app.use("/api/profile", profileRouter);
 
-app.use("/projects", projectsRouter);
+app.use("/api/projects", projectsRouter);
 
-app.use("/skills", skillsRouter);
+app.use("/api/skills", skillsRouter);
 
-app.use("/experience", experienceRouter);
+app.use("/api/experience", experienceRouter);
 
 export { app };
