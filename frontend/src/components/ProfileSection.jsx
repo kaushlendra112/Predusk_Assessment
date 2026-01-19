@@ -46,7 +46,7 @@ const ProfileSection = ({ profile }) => {
         </div>
       </div>
       
-      {isEditing && (
+      {/* {isEditing && (
         <div className="mt-6 p-4 border-t">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">Edit Profile</h3>
           <form className="space-y-4">
@@ -72,7 +72,7 @@ const ProfileSection = ({ profile }) => {
             </button>
           </form>
         </div>
-      )}
+      )} */}
     </section>
   );
 };
