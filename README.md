@@ -1,18 +1,14 @@
 Live Links
-
 Backend API: https://your-backend-url.onrender.com
-
 Frontend: https://your-frontend-url.vercel.app
+GitHub Repo: https://github.com/kaushlendra112/Predusk_Assessment
+Resume: https://drive.google.com/file/d/1ZfDqvtspCVz4PV7wIXadk9BNyBHaTOiG/view?usp=sharing
 
-GitHub Repo: https://github.com/your-username/me-api-playground
 
-Resume: https://your-resume-link
- (Google Drive / Portfolio)
-
-🏗 Architecture
-Frontend (HTML / React)
+Architecture
+Frontend (React.js + Tailwind CSS)
         |
-        |  Fetch API (CORS enabled)
+        |  Axios API (CORS enabled)
         v
 Backend (Node.js + Express)
         |
@@ -20,205 +16,161 @@ Backend (Node.js + Express)
         v
 MongoDB Atlas
 
-🛠 Tech Stack
 
+Tech Stack
 Backend: Node.js, Express.js
-
 Database: MongoDB Atlas, Mongoose
+Frontend: React.js + Tailwind CSS
 
-Frontend: Plain HTML + JavaScript (or React)
 
 Hosting:
-
 Backend: Render
-
-Frontend: Vercel / Netlify
-
+Frontend: Vercel 
 DB: MongoDB Atlas
 
-📦 Features
 
+Features
 Store single candidate profile (me)
-
 Public REST APIs to:
-
-View profile
-
-Query projects by skill
-
-Search across profile data
-
+View, Update profile
+Update Skills
+Add, Edit, Delete Projects
+Add, Edit, Delete Work Experience
 Health check endpoint for liveness
-
 Very minimal frontend UI
-
 CORS-enabled hosted API
 
-🗄 Database Schema
+Database Schema
 Profile Schema (MongoDB)
-Profile {
-  name: String,
-  email: String,
+Profile 
+        name: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        email: {
+            type: String,
+            required: true,
+            lowercase: true,
+            trim: true
+        },
+        education: [
+            {
+                degree: String,
+                institution: String,
+                year: String
+            }
+        ],
+        skills: [
+            {
+                type: String,
+                lowercase: true,
+                trim: true
+            }
+        ],
+        projects: [
+            {
+                title: String,
+                description: String,
+                links: {
+                    github: String,
+                    live: String
+                }
+            }
+        ],
+        work: [
+            {
+                company: String,
+                role: String,
+                duration: String
+            }
+        ],
+        links: {
+            github: String,
+            linkedin: String,
+            portfolio: String
+        }
 
-  education: [
-    {
-      degree: String,
-      institution: String,
-      year: String
-    }
-  ],
 
-  skills: [String],
-
-  projects: [
-    {
-      title: String,
-      description: String,
-      links: {
-        github: String,
-        live: String
-      }
-    }
-  ],
-
-  work: [
-    {
-      company: String,
-      role: String,
-      duration: String
-    }
-  ],
-
-  links: {
-    github: String,
-    linkedin: String,
-    portfolio: String
-  }
-}
-
-
-⚠️ Only one profile document exists in the database.
-
-🚀 API Endpoints
+API Base URL : 
+API Endpoints :
 🔹 Health Check
 GET /health
-
-
 Response:
-
-{ "status": "OK" }
+{ 
+  "status": "OK"
+  "success": "true" 
+}
 
 🔹 Get Profile
-GET /profile
+GET /api/profile
 
 🔹 Create Profile (one-time)
-POST /profile
+POST /api/profile
 
 🔹 Update Profile
-PUT /profile
+PUT /api/profile
 
-🔹 Query Projects by Skill
-GET /projects?skill=react
+🔹 Add Project
+POST /api/projects
+
+🔹 Update Project
+PUT /api/projects/:projectId
+
+🔹 Delete Project
+DELETE /api/projects/:projectId
 
 🔹 Get Top Skills
 GET /skills/top
 
-🔹 Global Search
-GET /search?q=node
+🔹 Update Skills
+PUT /skills
+
+🔹 Add work Experience
+POST /api/experience
+
+🔹 Update Project
+PUT /api/experience/:experienceId
+
+🔹 Delete Project
+DELETE /api/experience/:experienceId
 
 
-Searches across:
 
-Skills
-
-Project titles
-
-Project descriptions
-
-🧪 Sample curl Requests
-curl https://your-backend-url.onrender.com/health
-
-curl https://your-backend-url.onrender.com/profile
-
-curl "https://your-backend-url.onrender.com/projects?skill=javascript"
-
-curl "https://your-backend-url.onrender.com/search?q=node"
-
-🖥 Frontend
-
-The frontend is intentionally very basic and allows:
-
-Viewing my profile
-
-Searching projects by skill
-
-Listing projects dynamically
-
-It communicates with the hosted backend API using fetch() with CORS enabled.
-
-⚙️ Local Setup
+⚙️ Steps for Local Setup -
 1️⃣ Clone Repository
-git clone https://github.com/your-username/me-api-playground.git
-cd me-api-playground
+git clone https://github.com/kaushlendra112/Predusk_Assessment.git
+cd Predusk_Assessment
 
 2️⃣ Install Dependencies
+cd backend
+npm install
+cd ..
+cd frontend
 npm install
 
 3️⃣ Environment Variables
-
-Create .env file:
-
+Create .env file in backend root folder :
 PORT=5000
 MONGO_URI=your_mongodb_atlas_connection_string
 
 4️⃣ Run Server
+backend :
+npm run start
+frontend : 
 npm run dev
 
+5️⃣ Create Profile (one-time)
+POST /api/profile
 
-Server will start at:
-
-http://localhost:5000
-
-🌱 Seed Data
-
-The database is seeded with my real profile data using a seed script.
-
-node seed.js
-
-🚫 Known Limitations
-
-No authentication (intentionally single-profile)
-
-Only one profile document allowed
-
-Basic text search (no ranking or pagination)
-
-Minimal frontend UI
-
-🎯 Why This Project?
-
-This project demonstrates:
-
-REST API design
-
-MongoDB schema modeling
-
-Query endpoints
-
-Full-stack deployment
-
-Clear technical documentation
 
 👤 Author
-
 Kaushlendra Chaurasiya
-B.Tech CSE Student
+B.Tech CSE Student at NIT Delhi
 
-GitHub: https://github.com/your-username
-
-LinkedIn: https://linkedin.com/in/your-profile
-
-Portfolio: https://your-portfolio-link
+GitHub: https://github.com/kaushlendra112
+LinkedIn: https://www.linkedin.com/in/kaushlendra-chaurasiya-bb32aa2b8/
+LeetCode: https://leetcode.com/u/Kkc_2024/
 
 ✅ Assessment Track: Backend (Track A – Me-API Playground)
 ✅ Status: Completed & Deployed
