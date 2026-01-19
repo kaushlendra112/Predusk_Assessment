@@ -61,7 +61,7 @@ export const updateProjects = async (req, res) => {
   }
 };
 
-export const addProject = async (req, res) => {
+export const addProjects = async (req, res) => {
   try {
     const { title, description, skills, links } = req.body;
 
