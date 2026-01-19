@@ -3,24 +3,21 @@ import React, { useMemo, useState } from "react";
 const ProjectsSection = ({ projects = [] }) => {
   const [searchSkill, setSearchSkill] = useState("");
 
-    // 🔍 Skill-based search logic
-    const filteredProjects = useMemo(() => {
+  // 🔍 Normalize skills and filter projects based on search
+  const filteredProjects = useMemo(() => {
     const query = searchSkill.trim().toLowerCase();
     if (!query) return projects;
 
     return projects.filter((project) => {
       let skillsArray = [];
 
-      // Case 1: Array of strings
       if (Array.isArray(project.skills)) {
         skillsArray = project.skills.map((s) =>
           typeof s === "string" ? s : s.skill
         );
-      }
-
-      // Case 2: Comma-separated string
-      if (typeof project.skills === "string") {
-        skillsArray = project.skills.split(",");
+      } else if (typeof project.skills === "string") {
+        // split by space or comma
+        skillsArray = project.skills.split(/[\s,]+/);
       }
 
       return skillsArray.some((skill) =>
@@ -45,44 +42,51 @@ const ProjectsSection = ({ projects = [] }) => {
 
       <div className="space-y-6">
         {filteredProjects.length > 0 ? (
-          filteredProjects.map((project) => (
-            <div
-              key={project._id}
-              className="p-4 border rounded-lg hover:shadow-md transition"
-            >
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {project.title}
-              </h3>
+          filteredProjects.map((project) => {
+            // Normalize skills for display
+            const skillsArray = Array.isArray(project.skills)
+              ? project.skills.map((s) => (typeof s === "string" ? s : s.skill))
+              : typeof project.skills === "string"
+              ? project.skills.split(/[\s,]+/)
+              : [];
 
-              <p className="text-gray-600 mb-3">
-                {project.description}
-              </p>
+            return (
+              <div
+                key={project._id}
+                className="p-4 border rounded-lg hover:shadow-md transition"
+              >
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  {project.title}
+                </h3>
 
-              {project.skills?.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.skills.map((skill, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              )}
+                <p className="text-gray-600 mb-3">{project.description}</p>
 
-              {project.links?.github && (
-                <a
-                  href={project.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  GitHub
-                </a>
-              )}
-            </div>
-          ))
+                {skillsArray.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {skillsArray.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {project.links?.github && (
+                  <a
+                    href={project.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    GitHub
+                  </a>
+                )}
+              </div>
+            );
+          })
         ) : (
           <div className="text-center text-gray-500 py-10">
             No projects found for this skill.
