@@ -9,12 +9,12 @@ const ProfileSection = ({ profile }) => {
     <section id="profile" className="bg-white rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Profile Information</h2>
-        <button
+        {/* <button
           onClick={() => setIsEditing(!isEditing)}
           className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition"
         >
           {isEditing ? 'Cancel' : 'Edit'}
-        </button>
+        </button> */}
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -3,6 +3,7 @@ import axios from 'axios';
 // const API_BASE_URL = 'http://localhost:3000';
 
 export const getProfile = () => axios.get(`/api/profile`);
+
 export const getAllSkills = () => axios.get(`/api/skills/top`);
 export const updateSkills = (skills) => axios.put(`/api/skills`, { skills });
 
