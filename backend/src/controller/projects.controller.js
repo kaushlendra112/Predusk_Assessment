@@ -2,28 +2,26 @@ import { Profile } from "../model/profile.model.js";
 
 export const searchProjectsBySkills = async (req, res) => {
   try {
-    let { skill } = req.query;
+    const { skill } = req.query;
+
     if (!skill) {
       return res.status(400).json({ message: "Skill query is required" });
     }
 
-    if (Array.isArray(skill)) {
-      skill = skill[0];
-    }
-
-    skill = skill.toString().toLowerCase();
-
     const profile = await Profile.findOne({
-      skills: skill
+      $or: [
+        { skills: { $regex: skill, $options: "i" } },
+        { "projects.skills": { $regex: skill, $options: "i" } }
+      ]
     });
 
     if (!profile) {
-      return res.json([]);
+      return res.status(404).json({ message: "No match found" });
     }
 
-    res.json(profile.projects);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json(profile);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -32,78 +30,65 @@ export const updateProjects = async (req, res) => {
     const { projectId } = req.params;
     const updateData = {};
 
-    if (req.body.title !== undefined) {
+    if (req.body.title !== undefined)
       updateData["projects.$.title"] = req.body.title;
-    }
 
-    if (req.body.description !== undefined) {
+    if (req.body.description !== undefined)
       updateData["projects.$.description"] = req.body.description;
-    }
 
-    if (req.body.links && typeof req.body.links === "object") {
-      Object.keys(req.body.links).forEach((key) => {
-        updateData[`projects.$.links.${key}`] = req.body.links[key];
-      });
-    }
+    if (req.body.skills !== undefined)
+      updateData["projects.$.skills"] = req.body.skills;
 
-    if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({ message: "No valid fields provided for update" });
-    }
+    if (req.body.links !== undefined)
+      updateData["projects.$.links"] = req.body.links;
 
     const profile = await Profile.findOneAndUpdate(
       { "projects._id": projectId },
       { $set: updateData },
-      {
-        new: true,
-        runValidators: true
-      }
+      { new: true }
     );
 
     if (!profile) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    res.json(profile);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json({
+      message: "Project updated successfully",
+      projects: profile.projects
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-export const addProjects = async (req, res) => {
+export const addProject = async (req, res) => {
   try {
-    const { title, description, links } = req.body;
+    const { title, description, skills, links } = req.body;
 
-    if (!title || !description) {
-      return res.status(400).json({
-        message: "Title and description are required"
-      });
+    if (!title) {
+      return res.status(400).json({ message: "Project title is required" });
     }
 
-    const newProject = {
-      title,
-      description,
-      links: {
-        github: links?.github || "",
-        live: links?.live || ""
-      }
-    };
-
-    const profile = await Profile.findOneAndUpdate(
-      {},
-      { $push: { projects: newProject } },
-      {
-        new: true,
-        runValidators: true
-      }
-    );
-
+    const profile = await Profile.findOne();
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
 
-    res.status(201).json(profile);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    profile.projects.push({
+      title,
+      description,
+      skills,
+      links
+    });
+
+    await profile.save();
+
+    res.status(201).json({
+      message: "Project added successfully",
+      projects: profile.projects
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -114,17 +99,18 @@ export const removeProjects = async (req, res) => {
     const profile = await Profile.findOneAndUpdate(
       {},
       { $pull: { projects: { _id: projectId } } },
-      {
-        new: true
-      }
+      { new: true }
     );
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
 
-    res.json(profile);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json({
+      message: "Project deleted successfully",
+      projects: profile.projects
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

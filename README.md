@@ -1,6 +1,6 @@
 Live Links
-Backend API: https://your-backend-url.onrender.com
-Frontend: https://your-frontend-url.vercel.app
+Backend API: https://kaushlendra-profile.onrender.com
+Frontend: https://kaushlendraprofile.netlify.app
 GitHub Repo: https://github.com/kaushlendra112/Predusk_Assessment
 Resume: https://drive.google.com/file/d/1ZfDqvtspCVz4PV7wIXadk9BNyBHaTOiG/view?usp=sharing
 
@@ -30,13 +30,14 @@ DB: MongoDB Atlas
 
 
 Features
+Health check endpoint for liveness
 Store single candidate profile (me)
 Public REST APIs to:
 View, Update profile
 Update Skills
 Add, Edit, Delete Projects
+Search project by used Skills
 Add, Edit, Delete Work Experience
-Health check endpoint for liveness
 Very minimal frontend UI
 CORS-enabled hosted API
 
@@ -75,7 +76,10 @@ Profile
                 links: {
                     github: String,
                     live: String
-                }
+                },
+                skills: {
+                    type: String
+                },
             }
         ],
         work: [
@@ -92,8 +96,10 @@ Profile
         }
 
 
-API Base URL : 
+API Base URL : https://kaushlendra-profile.onrender.com
+
 API Endpoints :
+
 🔹 Health Check
 GET /health
 Response:
@@ -119,6 +125,9 @@ PUT /api/projects/:projectId
 
 🔹 Delete Project
 DELETE /api/projects/:projectId
+
+🔹 Search Project By Skills
+GET /api/search/skills?skill=react
 
 🔹 Get Top Skills
 GET /skills/top

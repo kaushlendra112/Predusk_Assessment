@@ -34,7 +34,8 @@ const profileSchema = new Schema(
                 links: {
                     github: String,
                     live: String
-                }
+                },
+                skills: String,
             }
         ],
         work: [
@@ -47,7 +48,7 @@ const profileSchema = new Schema(
         links: {
             github: String,
             linkedin: String,
-            portfolio: String
+            leetcode: String
         }
     }, 
     {
